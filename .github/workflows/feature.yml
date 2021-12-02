@@ -1,0 +1,29 @@
+name: Test features
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Add project environment
+        run: cp .env.example .env
+
+      - name: Add node environment
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: v12.13.1
+
+      - name: Test and build codes
+        run: |
+          echo Install package
+          npm install
+          echo Run test
+          npm run lint
