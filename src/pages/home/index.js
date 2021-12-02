@@ -76,7 +76,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <span>homepage test</span>
+      <span>homepage test has cicd</span>
       <div className='home'>{generateHome()}</div>
       { totalRow && generatePaginate() }
       <div className='size'>
