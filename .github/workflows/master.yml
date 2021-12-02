@@ -1,0 +1,44 @@
+name: Deploy with ssh
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Install ssh key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: '#something'
+
+      - name: Adding known hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Add project environment
+        run: cp .env.example .env
+
+      - name: Add node environment
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: v12.13.1
+
+      - name: Test and build codes
+        run: |
+          echo Install package
+          npm install
+          echo Run test
+          npm run lint
+          echo Build
+          npm run build
+
+      - name: Deploy with rsync
+        run: rsync -avzh --exclude=".git" --exclude=".github" build/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/ubuntu/cicd
+ 

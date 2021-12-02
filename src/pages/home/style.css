@@ -1,0 +1,10 @@
+.paginate {
+    display: flex;
+    justify-content: flex-start;
+}
+.item-page {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #000;
+    cursor: pointer;
+}
